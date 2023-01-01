@@ -19,6 +19,9 @@ extension SwiftTarot {
             remainingCards = deck[s.size..<idx]
             spreadType = s
         }
+        public func getSpreadCard(row r: Int, col c: Int) -> TarotCard {
+            deck[((r * 3) + c)]
+        }
         public func readNextInSpread() -> UprightSpreadPos? {
             let i = spread.spreadCards.firstIndex { card in
                 card.faceUp == false
