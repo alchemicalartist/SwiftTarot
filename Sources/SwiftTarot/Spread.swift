@@ -3,19 +3,19 @@ import Foundation
 extension SwiftTarot {
     public class Spread: CustomStringConvertible {
         public typealias DeckSlice = ArraySlice<TarotCard>
-        public private(set) var spread: [SpreadPosition] = Array<SpreadPosition>()
-        public var spreadCards = DeckSlice()
+        public private(set) var positions: [SpreadPosition] = Array<SpreadPosition>()
+        public var cards = DeckSlice()
         public var clarifiers = DeckSlice()
         public init() {}
         public func newSpread(_ s: SpreadType, witchCards c: DeckSlice, andClarifiers cl: DeckSlice) {
-            spread = s.positions
-            spreadCards = c
+            positions = s.positions
+            cards = c
             clarifiers = cl
         }
         public var description: String {
-            var res = "***** Contents of Spread: \(spreadCards.count) cards  *****\n"
-            spread.forEach { pos in
-                res += "\(pos.description): " + String(describing: spreadCards[pos.order]) + "\n"
+            var res = "***** Contents of Spread: \(cards.count) cards  *****\n"
+            positions.forEach { pos in
+                res += "\(pos.description): " + String(describing: cards[pos.order]) + "\n"
             }
             res += "\n"
             res += "***** Contents of Clarifiers: \(clarifiers.count) cards  *****\n"

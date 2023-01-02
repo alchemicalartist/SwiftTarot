@@ -10,6 +10,15 @@ extension SwiftTarot {
         public private(set) var remainingCards = ArraySlice<TarotCard>()
         public var spreadType: SpreadType = .none
         public init() {}
+        public init(_ s: SpreadType){
+            deck = Deck.setupDeck()
+            let idx = deck.lastIndex { card in
+                card.suit == .major
+            }
+            spread.newSpread(s, witchCards: deck[0..<s.size], andClarifiers: deck[idx..<deck.count])
+            remainingCards = deck[s.size..<idx]
+            spreadType = s
+        }
         public func chooseSpread(spreadType s: SpreadType) {
             deck = Deck.setupDeck()
             let idx = deck.lastIndex { card in
@@ -23,14 +32,14 @@ extension SwiftTarot {
             deck[((r * 3) + c)]
         }
         public func readNextInSpread() -> UprightSpreadPos? {
-            let i = spread.spreadCards.firstIndex { card in
+            let i = spread.cards.firstIndex { card in
                 card.faceUp == false
             }
             if i == nil { return nil }
             let idx = i!
             deck.faceUp(at: idx)
-            spread.spreadCards = deck[0..<spreadType.size]
-            return UprightSpreadPos(card: deck[idx], position: spread.spread[idx])
+            spread.cards = deck[0..<spreadType.size]
+            return UprightSpreadPos(card: deck[idx], position: spread.positions[idx])
         }
         public func readNextClarifier() -> TarotCard? {
             let i = spread.clarifiers.firstIndex { card in
