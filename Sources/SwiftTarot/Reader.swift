@@ -2,6 +2,7 @@ import Foundation
 
 
 extension SwiftTarot {
+    @available(iOS 13.0, *)
     @available(macOS 10.15, *)
     public class Reader: ObservableObject, CustomStringConvertible  {
         public typealias DeckSlice = ArraySlice<TarotCard>
@@ -15,7 +16,7 @@ extension SwiftTarot {
             let idx = deck.lastIndex { card in
                 card.suit == .major
             }
-            spread.newSpread(s, witchCards: deck[0..<s.size], andClarifiers: deck[idx..<deck.count])
+            spread.newSpreadType(s, witchCards: deck[0..<s.size], andClarifiers: deck[idx..<deck.count])
             remainingCards = deck[s.size..<idx]
             spreadType = s
         }
@@ -24,33 +25,9 @@ extension SwiftTarot {
             let idx = deck.lastIndex { card in
                 card.suit == .major
             }
-            spread.newSpread(s, witchCards: deck[0..<s.size], andClarifiers: deck[idx..<deck.count])
+            spread.newSpreadType(s, witchCards: deck[0..<s.size], andClarifiers: deck[idx..<deck.count])
             remainingCards = deck[s.size..<idx]
             spreadType = s
-        }
-        public func getSpreadCard(row r: Int, col c: Int) -> TarotCard {
-            deck[((r * 3) + c)]
-        }
-        public func readNextInSpread() -> UprightSpreadPos? {
-            let i = spread.cards.firstIndex { card in
-                card.faceUp == false
-            }
-            if i == nil { return nil }
-            let idx = i!
-            deck.faceUp(at: idx)
-            spread.cards = deck[0..<spreadType.size]
-            return UprightSpreadPos(card: deck[idx], position: spread.positions[idx])
-        }
-        public func readNextClarifier() -> TarotCard? {
-            let i = spread.clarifiers.firstIndex { card in
-                card.faceUp == false
-            }
-            if i == nil { return nil }
-            let idx = i!
-            deck.faceUp(at: idx)
-            let cl = deck.count - spread.clarifiers.count
-            spread.clarifiers = deck[cl...deck.endIndex]
-            return spread.clarifiers[idx]
         }
         public var description: String {
             var res = String(describing: spread)

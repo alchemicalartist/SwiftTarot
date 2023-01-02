@@ -7,7 +7,7 @@ extension SwiftTarot {
         public var cards = DeckSlice()
         public var clarifiers = DeckSlice()
         public init() {}
-        public func newSpread(_ s: SpreadType, witchCards c: DeckSlice, andClarifiers cl: DeckSlice) {
+        public func newSpreadType(_ s: SpreadType, witchCards c: DeckSlice, andClarifiers cl: DeckSlice) {
             positions = s.positions
             cards = c
             clarifiers = cl

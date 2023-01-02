@@ -31,7 +31,9 @@ extension SwiftTarot {
             for major in MajorCard.allCases {
                 cards.append(TarotCard(suit: .major, cardValue: major))
             }
-            return Deck(cards)
+            var res = Deck(cards)
+            res.shuffle()
+            return res
         }
         
         private mutating func cutDeckAt(_ i: Int) {
@@ -47,22 +49,16 @@ extension SwiftTarot {
             cards.insert(card, at: idx)
         }
         public mutating func shuffle() {
-            let shuffleNum = Int(random(UInt(73)) % 13)
-            for _ in 0..<shuffleNum {
-                cards.shuffle()
-                let revNum = Int(random(UInt(31)) % 3)
-                var revCards = [TarotCard]()
-                for _ in 0..<revNum {
-                    revCards.append(randomCard())
-                }
-                revCards.forEach { card in
-                    var revCard = card
-                    revCard.reversed.toggle()
-                    let idx = cards.firstIndex(of: card)!
-                    cards.remove(at: idx)
-                    cards.insert(revCard, at: idx)
-                }
+            var shuffled = cards as Array<TarotCard>
+            shuffled.shuffle()
+            let revNum = Int.random(in: 0..<deckSize) % 7
+            (0..<revNum).forEach { _ in
+                var revCard = cards.randomElement()!
+                let index = shuffled.firstIndex(of: revCard)!
+                revCard.reversed.toggle()
+                shuffled.replaceSubrange(index...index, with: [revCard])
             }
+            cards = shuffled
         }
         public var count: Int {
             cards.count
@@ -74,7 +70,6 @@ extension SwiftTarot {
             cards.insert(c, at: i)
         }
         fileprivate mutating func remove(at i: Int) {
-            let c = cards[i]
             cards.remove(at: i)
         }
         fileprivate mutating func append(_ c: TarotCard) {
