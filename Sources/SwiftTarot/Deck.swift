@@ -1,12 +1,13 @@
 import Foundation
 
 extension SwiftTarot {
-    public struct Deck: Equatable, CustomStringConvertible, Sequence, Collection, ExpressibleByArrayLiteral  {
+    public struct Deck: Equatable, CustomStringConvertible, Sequence, Collection, ExpressibleByArrayLiteral {
         public typealias DeckIndex = Int
+        public typealias Element = TarotCard
         public typealias DeckIndexRange = Range<DeckIndex>
         public typealias DeckSlice = ArraySlice<TarotCard>
         public typealias Iterator = DeckIterator
-        fileprivate var cards: [TarotCard]
+        fileprivate var cards: [TarotCard] = []
         public let deckSize = 78
         public init(_ cards: [TarotCard]) {
             self.cards = cards
@@ -14,7 +15,7 @@ extension SwiftTarot {
         public init(arrayLiteral elements: TarotCard...) {
             self.init(elements)
         }
-        public subscript(position: DeckIndex) -> Iterator.Element {
+        public subscript(position: DeckIndex) -> TarotCard {
             precondition(cards.indices.contains(position), "out of bounds")
             return cards[position]
         }
@@ -37,7 +38,7 @@ extension SwiftTarot {
         }
         
         private mutating func cutDeckAt(_ i: Int) {
-            var new = [TarotCard]()
+            var new: [TarotCard] = []
             new.append(contentsOf: cards[i...cards.endIndex])
             new.append(contentsOf: cards[cards.startIndex..<i])
             cards = new
@@ -49,10 +50,8 @@ extension SwiftTarot {
             cards.insert(card, at: idx)
         }
         public mutating func shuffle() {
-            var shuffled = cards as Array<TarotCard>
-            shuffled.shuffle()
-            let revNum = Int.random(in: 0..<deckSize) % 7
-            (0..<revNum).forEach { _ in
+            var shuffled = cards.shuffled()
+            (0..<(Int.random(in: 0..<deckSize) % 7)).forEach { _ in
                 var revCard = cards.randomElement()!
                 let index = shuffled.firstIndex(of: revCard)!
                 revCard.reversed.toggle()
@@ -85,7 +84,7 @@ extension SwiftTarot {
             }
             return res
         }
-        public func makeIterator() -> Iterator {
+        public func makeIterator() -> DeckIterator {
             DeckIterator(self)
         }
         public var startIndex: DeckIndex {
@@ -105,14 +104,14 @@ extension SwiftTarot {
     public struct DeckIterator: IteratorProtocol {
         public typealias Element = TarotCard
         let deck: Deck
-        var times = 0
+        var idx = 0
         init(_ d: Deck) {
             self.deck = d
         }
-        public mutating func next() -> TarotCard? {
-            guard times < deck.count else { return nil }
-            let card = deck[times]
-            times += 1
+        public mutating func next() -> Self.Element? {
+            guard idx < deck.count else { return nil }
+            let card = deck[idx]
+            idx += 1
             return card
         }
     }

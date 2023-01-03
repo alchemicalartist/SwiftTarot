@@ -3,6 +3,13 @@ public protocol CardValueProtocol: Comparable, RawRepresentable, CaseIterable {
     var asString: String { get }
 }
 
+public protocol TarotCardProtocol {
+    var suit: SwiftTarot.Suit { get }
+    var faceUp: Bool { get set }
+    var reversed: Bool { get set }
+    var cardValue: any CardValueProtocol { get }
+}
+
 extension SwiftTarot {
     public enum Suit: String, Comparable {
         case wands, cups, pentacles, swords, major
@@ -23,7 +30,7 @@ extension SwiftTarot {
         }
     }
     
-    public struct TarotCard: Hashable, Equatable, Comparable, CustomStringConvertible {
+    public struct TarotCard: Hashable, Equatable, Comparable, CustomStringConvertible, TarotCardProtocol {
         public let suit: Suit
         public var faceUp = false
         public var reversed = false
