@@ -4,10 +4,10 @@ import Foundation
 @available(iOS 13.0, *)
 extension SwiftTarot {
     public struct Spread: Equatable, CustomStringConvertible, Sequence, Collection {
-        public typealias Iterator = Set<Element>.Iterator
+        public typealias Iterator = Array<Element>.Iterator
         public typealias Element = SpreadPosition
-        public typealias Index = Set<Element>.Index
-        fileprivate var contents: Set<Element> = []
+        public typealias Index = Int
+        fileprivate var contents: [Element] = []
         fileprivate let spreadType: SpreadType
         public var name: String {
             spreadType.rawValue
@@ -16,7 +16,7 @@ extension SwiftTarot {
             spreadType.size
         }
         public init(_ n: SpreadType) {
-            contents = Set(n.positions)
+            contents = n.positions
             spreadType = n
         }
         public subscript(position: Index) -> Element {
