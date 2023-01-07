@@ -42,7 +42,7 @@ extension SwiftTarot {
             var shuffled = self.cards.shuffled()
             var g: [Int] = []
             (0..<(Int.random(in: 0..<deckSize) % 7)).forEach { _ in
-                let r = Int.random(in: 0..<deckSize)
+                var r = Int.random(in: 0..<deckSize)
                 while g.contains(r) == true {
                     r = Int.random(in: 0..<deckSize)
                 }
@@ -69,7 +69,7 @@ extension SwiftTarot {
             self.cards.append(c)
         }
         public mutating func lastMajor() -> Index {
-            var idx = self.cards.lastIndex{ card in
+            let idx = self.cards.lastIndex{ card in
                 card.suit == .major
             }
             return idx!
