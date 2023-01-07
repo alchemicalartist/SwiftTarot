@@ -1,10 +1,12 @@
 @available(macOS 10.15, *)
+@available(iOS 13.0, *)
 public protocol CardValueProtocol: Comparable, RawRepresentable, CaseIterable {
     var rawValue: Int { get }
     var asString: String { get }
 }
 
 @available(macOS 10.15, *)
+@available(iOS 13.0, *)
 public protocol TarotCardProtocol {
     var suit: SwiftTarot.Suit { get }
     var faceUp: Bool { get set }
@@ -16,6 +18,7 @@ public protocol TarotCardProtocol {
 }
 
 @available(macOS 10.15, *)
+@available(iOS 13.0, *)
 extension SwiftTarot {
     public enum Suit: String, Decodable, Comparable {
         case wands, cups, pentacles, swords, major

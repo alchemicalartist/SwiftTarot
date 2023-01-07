@@ -2,6 +2,7 @@ import Foundation
 
 
 @available(macOS 10.15, *)
+@available(iOS 13.0, *)
 public class SwiftTarot: ObservableObject {
     public typealias DeckSlice = ArraySlice<TarotCard>
     @Published public private(set) var deck = Deck()

@@ -1,6 +1,7 @@
 import Foundation
 
 @available(macOS 10.15, *)
+@available(iOS 13.0, *)
 extension SwiftTarot {
     public struct Deck:  Equatable, CustomStringConvertible, Sequence, Collection {
         public typealias DeckIndex = Int

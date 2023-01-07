@@ -8,6 +8,7 @@
 import Foundation
 
 @available(macOS 10.15, *)
+@available(iOS 13.0, *)
 extension SwiftTarot {
     struct DefaultHelper: TarotHelperProtocol {
         public func populateDeck() -> SwiftTarot.Deck {

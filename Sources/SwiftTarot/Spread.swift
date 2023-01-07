@@ -1,6 +1,7 @@
 import Foundation
 
 @available(macOS 10.15, *)
+@available(iOS 13.0, *)
 extension SwiftTarot {
     public struct Spread: Equatable, CustomStringConvertible, Sequence, Collection {
         public typealias Iterator = Set<Element>.Iterator
