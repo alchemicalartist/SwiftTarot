@@ -1,17 +1,23 @@
+@available(macOS 10.15, *)
 public protocol CardValueProtocol: Comparable, RawRepresentable, CaseIterable {
     var rawValue: Int { get }
     var asString: String { get }
 }
 
+@available(macOS 10.15, *)
 public protocol TarotCardProtocol {
     var suit: SwiftTarot.Suit { get }
     var faceUp: Bool { get set }
     var reversed: Bool { get set }
     var cardValue: any CardValueProtocol { get }
+    var keywords: SwiftTarot.CardAspects { get }
+    var cardDescription: SwiftTarot.CardAspects { get }
+    var info: String { get }
 }
 
+@available(macOS 10.15, *)
 extension SwiftTarot {
-    public enum Suit: String, Comparable {
+    public enum Suit: String, Decodable, Comparable {
         case wands, cups, pentacles, swords, major
         public static func < (lhs: Suit, rhs: Suit) -> Bool {
             lhs.rawValue < rhs.rawValue
@@ -30,14 +36,25 @@ extension SwiftTarot {
         }
     }
     
-    public struct TarotCard: Hashable, Equatable, Comparable, CustomStringConvertible, TarotCardProtocol {
+    public struct TarotCard:  Hashable, Equatable, Comparable, CustomStringConvertible, TarotCardProtocol {
         public let suit: Suit
         public var faceUp = false
         public var reversed = false
         public let cardValue: any CardValueProtocol
-        public init(suit: Suit, cardValue: some CardValueProtocol) {
-            self.suit = suit
-            self.cardValue = cardValue
+        public let keywords: CardAspects
+        public let cardDescription: CardAspects
+        public let info: String
+        public init(_ id: String, _ suit: String, _ info: String, _ kwUpright: String, _ kwReversed: String, _ descUpright: String, _ descReversed: String ) {
+            cardDescription = CardAspects(upright: descUpright, reversed: descReversed)
+            let tempSuit = suit
+            self.suit = Suit(rawValue: tempSuit)!
+            if self.suit == .major {
+                cardValue = MajorCard(rawValue: Int(id)!)!
+            } else {
+                cardValue = Rank(rawValue: Int(id)!)!
+            }
+            self.info = info
+            keywords = CardAspects(upright: kwUpright, reversed: kwReversed)
         }
         static public func ==(lhs: Self, rhs: Self) -> Bool {
             lhs.suit.rawValue == rhs.suit.rawValue && lhs.cardValue.rawValue == rhs.cardValue.rawValue
@@ -138,5 +155,14 @@ extension SwiftTarot {
             }
         }
     }
+    public struct CardAspects:  Hashable {
+        public let upright: String
+        public let reversed: String
+        
+        public init(upright: String, reversed: String) {
+            self.upright = upright
+            self.reversed = reversed
+        }
 
+    }
 }

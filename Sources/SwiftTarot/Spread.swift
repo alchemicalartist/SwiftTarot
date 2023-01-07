@@ -1,31 +1,50 @@
 import Foundation
 
+@available(macOS 10.15, *)
 extension SwiftTarot {
-    public class Spread: CustomStringConvertible {
-        public typealias DeckSlice = ArraySlice<TarotCard>
-        public private(set) var positions: [SpreadPosition] = Array<SpreadPosition>()
-        public var cards = DeckSlice()
-        public var clarifiers = DeckSlice()
-        public init() {}
-        public func newSpreadType(_ s: SpreadType, witchCards c: DeckSlice, andClarifiers cl: DeckSlice) {
-            positions = s.positions
-            cards = c
-            clarifiers = cl
+    public struct Spread: Equatable, CustomStringConvertible, Sequence, Collection {
+        public typealias Iterator = Set<Element>.Iterator
+        public typealias Element = SpreadPosition
+        public typealias SpreadIndex = Set<Element>.Index
+        fileprivate var contents: Set<Element> = []
+        fileprivate let spreadType: SpreadType
+        public var name: String {
+            spreadType.rawValue
+        }
+        public var size: Int {
+            spreadType.size
+        }
+        public init(_ n: SpreadType) {
+            contents = Set(n.positions)
+            spreadType = n
+        }
+        public subscript(position: SpreadIndex) -> Element {
+            precondition(contents.indices.contains(position), "out of bounds")
+            return contents[position]
+        }
+        public subscript(idx: SpreadIndex) -> Element? {
+            contents[idx]
+        }
+        public var startIndex: SpreadIndex {
+            contents.startIndex
+        }
+        public var endIndex: SpreadIndex {
+            contents.endIndex
+        }
+        public func index(after i: SpreadIndex) -> SpreadIndex {
+            contents.index(after: i)
+        }
+        public func makeIterator() -> Iterator {
+            contents.makeIterator()
         }
         public var description: String {
-            var res = "***** Contents of Spread: \(cards.count) cards  *****\n"
-            positions.forEach { pos in
-                res += "\(pos.description): " + String(describing: cards[pos.order]) + "\n"
-            }
-            res += "\n"
-            res += "***** Contents of Clarifiers: \(clarifiers.count) cards  *****\n"
-            clarifiers.reversed().forEach { card in
-                res += String(describing: card) + "\n"
+            var res = "***** Contents of Spread: \(contents.count) cards  *****\n"
+            contents.forEach { pos in
+                res += "\(pos.description): " + "\n"
             }
             return res
         }
     }
-    
     public struct SpreadPosition: CustomStringConvertible, Hashable, Identifiable {
         public var id: AnyHashable {
             name.hashValue
@@ -126,5 +145,4 @@ extension SwiftTarot {
             }
         }
     }
-
 }

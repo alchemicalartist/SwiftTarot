@@ -1,13 +1,15 @@
 import Foundation
 
+@available(macOS 10.15, *)
 extension SwiftTarot {
-    public struct Deck: Equatable, CustomStringConvertible, Sequence, Collection, ExpressibleByArrayLiteral {
+    public struct Deck:  Equatable, CustomStringConvertible, Sequence, Collection {
         public typealias DeckIndex = Int
         public typealias Element = TarotCard
+        public typealias Cards = [TarotCard]
         public typealias DeckIndexRange = Range<DeckIndex>
         public typealias DeckSlice = ArraySlice<TarotCard>
         public typealias Iterator = DeckIterator
-        fileprivate var cards: [TarotCard] = []
+        fileprivate var cards: Cards = []
         public let deckSize = 78
         public init(_ cards: [TarotCard]) {
             self.cards = cards
@@ -21,22 +23,7 @@ extension SwiftTarot {
         }
         public subscript(bounds: DeckIndexRange) -> DeckSlice {
             cards[bounds]
-        }
-        public static func setupDeck() -> Deck {
-            var cards: [TarotCard] = []
-            for rank in Rank.allCases {
-                for suit in Suit.minors {
-                    cards.append(TarotCard(suit: suit, cardValue: rank))
-                }
-            }
-            for major in MajorCard.allCases {
-                cards.append(TarotCard(suit: .major, cardValue: major))
-            }
-            var res = Deck(cards)
-            res.shuffle()
-            return res
-        }
-        
+        }        
         private mutating func cutDeckAt(_ i: Int) {
             var new: [TarotCard] = []
             new.append(contentsOf: cards[i...cards.endIndex])
