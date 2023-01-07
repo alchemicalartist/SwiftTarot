@@ -44,6 +44,13 @@ extension SwiftTarot {
         public let keywords: CardAspects
         public let cardDescription: CardAspects
         public let info: String
+        internal init(suit s: Suit, cardValue cv: some CardValueProtocol){
+            suit = s
+            cardValue = cv
+            keywords = CardAspects(upright: "", reversed: "")
+            cardDescription = CardAspects(upright: "", reversed: "")
+            info = ""
+        }
         public init(_ id: String, _ suit: String, _ info: String, _ kwUpright: String, _ kwReversed: String, _ descUpright: String, _ descReversed: String ) {
             cardDescription = CardAspects(upright: descUpright, reversed: descReversed)
             let tempSuit = suit
