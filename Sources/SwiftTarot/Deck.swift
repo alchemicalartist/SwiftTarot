@@ -10,7 +10,7 @@ extension SwiftTarot {
         public typealias Cards = [TarotCard]
         public typealias DeckIndexRange = Range<DeckIndex>
         public typealias DeckSlice = ArraySlice<TarotCard>
-        public typealias Iterator = Array<TarotCard>.Iterator
+        public typealias Iterator = SwiftTarot.Deck.Cards.Iterator
         fileprivate var cards: Cards = []
         public let deckSize = 78
         public init(_ cards: [TarotCard]) {
@@ -74,7 +74,7 @@ extension SwiftTarot {
             return res
         }
         public func makeIterator() -> Iterator {
-            cards.Iterator(self)
+            Iterator(_elements: cards)
         }
         public var startIndex: Int {
             cards.startIndex
