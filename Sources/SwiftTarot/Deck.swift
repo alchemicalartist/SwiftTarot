@@ -5,11 +5,12 @@ import Foundation
 extension SwiftTarot {
     public struct Deck:  Equatable, CustomStringConvertible, Sequence, Collection {
         public typealias DeckIndex = Int
+        public typealias Index = Int
         public typealias Element = TarotCard
         public typealias Cards = [TarotCard]
         public typealias DeckIndexRange = Range<DeckIndex>
         public typealias DeckSlice = ArraySlice<TarotCard>
-        public typealias Iterator = DeckIterator
+        public typealias Iterator = Array<TarotCard>.Iterator
         fileprivate var cards: Cards = []
         public let deckSize = 78
         public init(_ cards: [TarotCard]) {
@@ -22,7 +23,7 @@ extension SwiftTarot {
             precondition(cards.indices.contains(position), "out of bounds")
             return cards[position]
         }
-        public subscript(bounds: DeckIndexRange) -> DeckSlice {
+        public subscript(bounds: Range<DeckIndex>) -> DeckSlice {
             cards[bounds]
         }        
         private mutating func cutDeckAt(_ i: Int) {
@@ -62,7 +63,7 @@ extension SwiftTarot {
         fileprivate mutating func append(_ c: TarotCard) {
             cards.append(c)
         }
-        public mutating func lastIndex(where p: ((TarotCard) -> Bool)) -> Int {
+        public mutating func lastIndex(where p: @escaping ((TarotCard) -> Bool)) -> Int {
             cards.lastIndex(where: p)!
         }
         public var description: String {
@@ -72,35 +73,20 @@ extension SwiftTarot {
             }
             return res
         }
-        public func makeIterator() -> DeckIterator {
-            DeckIterator(self)
+        public func makeIterator() -> Iterator {
+            cards.Iterator(self)
         }
-        public var startIndex: DeckIndex {
+        public var startIndex: Int {
             cards.startIndex
         }
-        public var endIndex: DeckIndex {
+        public var endIndex: Int {
             cards.endIndex
         }
         
         public func index(after i: Int) -> Int {
-            precondition(cards.indices.contains(i), "out of bound")
             return cards.index(after: i)
         }
         
     }
     
-    public struct DeckIterator: IteratorProtocol {
-        public typealias Element = TarotCard
-        let deck: Deck
-        var idx = 0
-        init(_ d: Deck) {
-            self.deck = d
-        }
-        public mutating func next() -> Self.Element? {
-            guard idx < deck.count else { return nil }
-            let card = deck[idx]
-            idx += 1
-            return card
-        }
-    }
 }

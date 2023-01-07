@@ -6,7 +6,7 @@ extension SwiftTarot {
     public struct Spread: Equatable, CustomStringConvertible, Sequence, Collection {
         public typealias Iterator = Set<Element>.Iterator
         public typealias Element = SpreadPosition
-        public typealias SpreadIndex = Set<Element>.Index
+        public typealias Index = Set<Element>.Index
         fileprivate var contents: Set<Element> = []
         fileprivate let spreadType: SpreadType
         public var name: String {
@@ -19,20 +19,19 @@ extension SwiftTarot {
             contents = Set(n.positions)
             spreadType = n
         }
-        public subscript(position: SpreadIndex) -> Element {
-            precondition(contents.indices.contains(position), "out of bounds")
-            return contents[position]
+        public subscript(position: Index) -> Element {
+            contents[position]
         }
-        public subscript(idx: SpreadIndex) -> Element? {
+        public subscript(idx: Index) -> Element? {
             contents[idx]
         }
-        public var startIndex: SpreadIndex {
+        public var startIndex: Index {
             contents.startIndex
         }
-        public var endIndex: SpreadIndex {
+        public var endIndex: Index {
             contents.endIndex
         }
-        public func index(after i: SpreadIndex) -> SpreadIndex {
+        public func index(after i: Index) -> Index {
             contents.index(after: i)
         }
         public func makeIterator() -> Iterator {
