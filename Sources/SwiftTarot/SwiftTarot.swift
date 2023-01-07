@@ -17,9 +17,7 @@ public class SwiftTarot: ObservableObject {
         var tmpDeck = dh.populateDeck()
         tmpDeck.shuffle()
         deck = tmpDeck
-        let idx = deck.lastIndex { card in
-            card.suit == .major
-        }
+        let idx = deck.lastMajor()
         spread = Spread(s)
         spreadCards = deck[deck.startIndex..<spread.size]
         clarifierCards = deck[idx...deck.endIndex]

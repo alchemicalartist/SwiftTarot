@@ -68,8 +68,11 @@ extension SwiftTarot {
         fileprivate mutating func append(_ c: Element) {
             self.cards.append(c)
         }
-        public mutating func lastIndex(where p: @escaping ((Element) -> Bool)) -> Index {
-            self.cards.lastIndex(where: @escaping p)!
+        public mutating func lastMajor() -> Index {
+            var idx = self.cards.lastIndex{ card in
+                card.suit == .major
+            }
+            return idx!
         }
         public var description: String {
             var res = ""
