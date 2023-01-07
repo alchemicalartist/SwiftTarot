@@ -57,6 +57,7 @@ public class SwiftTarot: ObservableObject {
 }
 
 @available(macOS 10.15, *)
+@available(iOS 13.0, *)
 public protocol TarotHelperProtocol {
     func populateDeck() -> SwiftTarot.Deck
 }
