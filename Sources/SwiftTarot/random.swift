@@ -16,6 +16,7 @@ public extension Collection {
     }
 }
 
+@available(macOS 10.15, *)
 public extension MutableCollection {
     mutating func shuffle() {
         var i = startIndex
@@ -30,6 +31,7 @@ public extension MutableCollection {
     }
 }
 
+@available(macOS 10.15, *)
 extension SwiftTarot {
     public static func random<T: BinaryInteger> (_ n: T) -> T {
         return numericCast( arc4random_uniform( numericCast(n)))
