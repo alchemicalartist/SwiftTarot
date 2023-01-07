@@ -19,8 +19,8 @@ public class SwiftTarot: ObservableObject {
         deck = tmpDeck
         let idx = deck.lastMajor()
         spread = Spread(s)
-        spreadCards = deck[deck.startIndex..<spread.size]
-        clarifierCards = deck[idx...deck.endIndex]
+        spreadCards = deck[0..<s.size]
+        clarifierCards = deck[idx..<deck.count]
         remainingCards = deck[s.size..<idx]
     }
     public convenience init (){
@@ -32,8 +32,8 @@ public class SwiftTarot: ObservableObject {
         deck = tmpDeck
         let idx = deck.lastMajor()
         spread = Spread(s)
-        spreadCards = deck[deck.startIndex..<spread.size]
-        clarifierCards = deck[idx...deck.endIndex]
+        spreadCards = deck[0..<s.size]
+        clarifierCards = deck[idx..<deck.count]
         remainingCards = deck[s.size..<idx]
     }
     public var description: String {
